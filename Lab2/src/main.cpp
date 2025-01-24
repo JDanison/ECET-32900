@@ -4,6 +4,20 @@
  * Date: 1/24/2025
  * 
  * ECET 32900 Lab 2 - Interrupts Review
+ * Description:
+ *  This lab simplifies and simulates a traffic light sequence. The program will:
+ *    1) Turn on a Red LED
+ *    2) Wait 4 Seconds
+ *    3) Turn off the Red LED and Turn on a Green LED
+ *    4) Wait 4 Seconds
+ *    5) Turn off the Green LED and Turn on a Yellow LED
+ *    6) Wait 4 Seconds 
+ *    7) Turn off the Yellow LED and Repeat back to step 1
+ * 
+ *    ISR)
+ *     1) When a button is pressed and INT0 is triggered, the current stoplight LED will clear and a 4th White LED will turn on. 
+ *     2) Wait 4 seconds
+ *     3) Continue with Stoplight sequence   
  */
 
 /* Libraries */
@@ -12,20 +26,28 @@
 #include <avr/interrupt.h>	 // General Interrupt
 
 /* Global Variables */
-volatile uint16_t tick;   // For Timer 0
+volatile bool walkSignISR = false;
+
 
 /* Global Constants */
-
+int redStopLightLED = PORTC0;
+int yellowStopLightLED = PORTC1;
+int greenStopLightLED = PORTC2;
+int whiteWalkSignLED = PORTC3;
 
 /* Function Prototypes */
 void init_io(void);
-void initTimer1Int(void);
+void init_interrupt(void);
+void walkSignInterrupt(void);
 
 /* Setup Function */
 void setup() {
   // Initializations
   init_io();			  // IO Initialization
-	initTimer1Int();	// Timer 0 Initialization
+  init_interrupt();
+
+  Serial.begin(9600);
+  Serial.println("Setup Done");
 
 	// Enable global interrupt
 	sei();
@@ -33,44 +55,55 @@ void setup() {
 
 /* Main Loop */
 void loop() {
-  // See if 500ms (500 Ticks) have passed
-	if (tick >= 500)
-	{
-		// Toggle Arudino LED On and off
-		PORTC ^= (1 << PC7);
-				
-		// Reset Tick Counter
-		tick = 0;
-	}
+  /* Check for walk sign ISR */
+	if (walkSignISR) {
+    PORTC = 0x00;
+    PORTC ^= (1 << whiteWalkSignLED);
+    Serial.println("White Light");
+    delay(4000);
+    walkSignISR = false;
+  }
+
+  /* Normal Stoplight Sequence */
+  // Red LED
+  PORTC = 0x00;
+  PORTC ^= (1 << redStopLightLED);
+  Serial.println("Red Light");
+  delay(4000);
+
+  // Green LED
+  PORTC = 0x00;
+  PORTC ^= (1 << greenStopLightLED);
+  Serial.println("Green Light");
+  delay(4000);
+
+  // Yellow LED
+  PORTC = 0x00;
+  PORTC ^= (1 << yellowStopLightLED);
+  Serial.println("Yellow Light");
+  delay(4000);
 }
 
 /* Custom Functions */
 // Function for IO initialization
 void init_io(void)
 {
-  // PORTC is the output for the LED Lights
+  // PORTC is the output for the Stop Lights LEDs
   DDRC = 0xFF;
   PORTC = 0x00;
-
-  // PORTF is for Analog Input
-  DDRF = 0x00;
-  PORTF = 0x00;
 	
-	// PORTE.4 as in Input
-	DDRE = 0x00;
-	PORTE = 0xFF;
+	// PORTD.0 as INT0 Input
+	DDRD = 0x00;
+	PORTD = 0x00;
 }
 
-// Timer Interrupt
-void initTimer1Int(void) {
-  TCCR1A = 0;                // Normal mode
-  TCCR1B = (1 << CS11) | (1 << CS10);  // clk / 64 prescaler
-  TCNT1 = 34286;             // Set counter value for 1 ms (16 MHz clock)
-  TIMSK1 = (1 << TOIE1);     // Enable Timer 1 overflow interrupt
+// Function for Interrupt initialization
+void init_interrupt(void) {
+  EICRA = (1 << ISC10) | (1 << ISC11);
+  EIMSK = (1 << INT1);
 }
 
-// Timer 1 Overflow Interrupt
-ISR(TIMER1_OVF_vect) {
-  TCNT1 = 34286;             // Reset Timer Value
-  tick++;
+/* Interrupt */
+ISR(INT1_vect) {
+  walkSignISR = true;
 }

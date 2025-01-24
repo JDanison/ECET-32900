@@ -1,0 +1,9 @@
+ATMega Datasheet
+https://ww1.microchip.com/downloads/en/devicedoc/atmel-2549-8-bit-avr-microcontroller-atmega640-1280-1281-2560-2561_datasheet.pdf
+
+ATMega Pinout
+https://www.electronicshub.org/wp-content/smush-webp/2021/01/Arduino-Mega-Pinout.jpg.webp
+
+ECET 27900
+
+ECET 32900 Peers
