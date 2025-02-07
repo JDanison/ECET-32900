@@ -40,6 +40,7 @@ void setup() {
   Serial.begin(9600);
 
   Serial.println("Initialization Finished");
+  Serial.println("--------------------------------------------------------------");
 }
 
 /* Main Loop */
@@ -58,35 +59,16 @@ void loop() {
 
   // Average ADC Reading
   avg_adc_reading = (adc_read_sum * 1.0 / NUM_SAMPLES);
-  
-  // For Debug*
-  Serial.println("\n---------------------------------------------------\nADC Reading");
-  Serial.print(avg_adc_reading);
 
   // Solve for the Thermister Resistance
   adc_ratio = MAX_ADC_VALUE / avg_adc_reading - 1;
   thermistor_resistance = (SERIES_RESISTOR / adc_ratio);
 
-  // For Debug*
-  Serial.println("\nThermistor Resistance");
-  Serial.print(thermistor_resistance);
-
   // Convert Room Temp from C to K
   room_temp_kelvin = (ROOM_TEMP + 273.15);
 
-  // For Debug*
-  Serial.println("\nRoom Temp Kelvin");
-  Serial.print(room_temp_kelvin);
-
   // Solve for Kelvin Thermistor Temperature
   thermistor_temp_kelvin = 1.0 / ((1.0 / room_temp_kelvin) + (log(thermistor_resistance / SERIES_RESISTOR) / THERMISTOR_B_VAL));
-
-  /* Testing */
-
-
-  // For Debug*
-  Serial.println("\nThermistor Temp Kelvin");
-  Serial.print(thermistor_temp_kelvin);
 
   // Convert Temp to C from Kelvin
   thermistor_temp_celsius = thermistor_temp_kelvin - 273.15;
