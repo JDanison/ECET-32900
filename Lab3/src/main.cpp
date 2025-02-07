@@ -11,6 +11,10 @@
  * https://learn.adafruit.com/thermistor/using-a-thermistor 
  * 
  * https://cplusplus.com/reference/cmath/log/ 
+ * 
+ * Worked with:
+ * James Leathers
+ * Joel Cox
  */
 
 /* Libraries */
@@ -32,6 +36,7 @@ float thermistor_resistance = 0;
 float room_temp_kelvin = 0;
 float thermistor_temp_kelvin = 0;
 float thermistor_temp_celsius = 0;
+float calibrated_temp = 0;
 
 
 /* Setup Function */
@@ -73,7 +78,10 @@ void loop() {
   // Convert Temp to C from Kelvin
   thermistor_temp_celsius = thermistor_temp_kelvin - 273.15;
 
+  // Calibration Correction
+  calibrated_temp = 1.0309 * thermistor_temp_celsius + 3.9896;
+
   // Print out the results
-  Serial.println("\nTemp Measured: ");
-  Serial.println(thermistor_temp_celsius);
+  Serial.println("\nTemp Measured (Calibrated): ");
+  Serial.println(calibrated_temp);
 }
