@@ -5,17 +5,13 @@
  * 
  * ECET 32900 Lab 3 - Thermister Analog Reading
  * Description:
+ *    The goal of this lab was to program an ATMEGA 2560 for temperature measurement using a thermistor and a calibration process.
  *  
- * 
  * Reference:
  * https://learn.adafruit.com/thermistor/using-a-thermistor 
- * 
  * https://cplusplus.com/reference/cmath/log/ 
  * 
- * Worked with:
- * James Leathers
- * Joel Cox
- */
+*/
 
 /* Libraries */
 #include <Arduino.h>         // Standard Arduino Library
@@ -37,7 +33,6 @@ float room_temp_kelvin = 0;
 float thermistor_temp_kelvin = 0;
 float thermistor_temp_celsius = 0;
 float calibrated_temp = 0;
-
 
 /* Setup Function */
 void setup() {  
