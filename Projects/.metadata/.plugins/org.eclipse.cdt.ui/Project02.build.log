@@ -1,0 +1,19 @@
+10:54:17 **** Incremental Build of configuration Release for project Project02 ****
+make -j16 all 
+arm-none-eabi-gcc -o "Project02.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Purdue\Spring 2025\ECET 32900\ECET-32900\Projects\Project02\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project02.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project02.elf
+ 
+arm-none-eabi-size  Project02.elf 
+arm-none-eabi-objdump -h -S Project02.elf  > "Project02.list"
+arm-none-eabi-objcopy  -O binary Project02.elf  "Project02.bin"
+   text	   data	    bss	    dec	    hex	filename
+   7680	     12	   1708	   9400	   24b8	Project02.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project02.list
+ 
+Finished building: Project02.bin
+ 
+
+10:54:18 Build Finished. 0 errors, 0 warnings. (took 844ms)
+
