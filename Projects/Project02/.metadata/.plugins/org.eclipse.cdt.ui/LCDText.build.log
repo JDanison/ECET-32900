@@ -1,0 +1,20 @@
+20:39:06 **** Incremental Build of configuration Release for project LCDText ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "LCDText.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Purdue\Spring 2025\ECET 32900\ECET-32900\Projects\Project02\LCDText\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LCDText.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: LCDText.elf
+ 
+arm-none-eabi-size  LCDText.elf 
+arm-none-eabi-objdump -h -S LCDText.elf  > "LCDText.list"
+arm-none-eabi-objcopy  -O binary LCDText.elf  "LCDText.bin"
+   text	   data	    bss	    dec	    hex	filename
+   4244	     12	   1572	   5828	   16c4	LCDText.elf
+Finished building: default.size.stdout
+ 
+Finished building: LCDText.list
+Finished building: LCDText.bin
+ 
+ 
+
+20:39:07 Build Finished. 0 errors, 0 warnings. (took 988ms)
+

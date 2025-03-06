@@ -1,0 +1,24 @@
+!SESSION 2025-03-05 18:58:02.580 -----------------------------------------------
+eclipse.buildId=Version 1.17.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-03-05 18:58:25.614
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-03-05 18:58:25.618
+!MESSAGE Log4j2 initialized with config file C:\Purdue\Spring 2025\ECET 32900\ECET-32900\Projects\Project02\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-03-05 18:58:27.866
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-05 18:59:20.430
+!MESSAGE Indexed 'LCDText' (23 sources, 82 headers) in 2.58 sec: 5,459 declarations; 29,401 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0057%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-05 19:17:49.247
+!MESSAGE Indexed 'LCDText' (22 sources, 81 headers) in 1.08 sec: 4,879 declarations; 23,011 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0072%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-05 19:18:00.977
+!MESSAGE Indexed 'LCDText' (22 sources, 81 headers) in 1.03 sec: 4,879 declarations; 23,011 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0072%)
