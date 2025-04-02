@@ -1,0 +1,5 @@
+../Core/Src/main.c:95:6:SystemClock_Config	96	static,ignoring_inline_asm
+../Core/Src/main.c:238:6:Error_Handler	0	static,ignoring_inline_asm
+../Core/Src/main.c:268:6:ledOn	0	static
+../Core/Src/main.c:273:6:ledOff	0	static
+../Core/Src/main.c:44:5:main	72	static,ignoring_inline_asm
