@@ -274,9 +274,3 @@ void ledOff()
 {
 	HAL_GPIO_WritePin(GPIOC, LED_PIN, GPIO_PIN_RESET);
 }
-
-
-
-
-
-

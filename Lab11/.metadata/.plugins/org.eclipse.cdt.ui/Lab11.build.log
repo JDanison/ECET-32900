@@ -1,0 +1,19 @@
+18:53:12 **** Incremental Build of configuration Release for project Lab11 ****
+make -j16 all 
+arm-none-eabi-gcc -o "Lab11.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Purdue\Spring 2025\ECET 32900\ECET-32900\Lab11\Lab11\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lab11.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Lab11.elf
+ 
+arm-none-eabi-size  Lab11.elf 
+arm-none-eabi-objdump -h -S Lab11.elf  > "Lab11.list"
+   text	   data	    bss	    dec	    hex	filename
+  24912	    472	   2128	  27512	   6b78	Lab11.elf
+arm-none-eabi-objcopy  -O binary Lab11.elf  "Lab11.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Lab11.list
+Finished building: Lab11.bin
+ 
+ 
+
+18:53:13 Build Finished. 0 errors, 0 warnings. (took 730ms)
+
