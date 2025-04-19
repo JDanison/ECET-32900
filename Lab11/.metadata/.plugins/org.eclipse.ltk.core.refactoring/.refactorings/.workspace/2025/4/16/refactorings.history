@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;FinalProject/Core/Src/BH1750 STM32.cpp&apos;" deleteContents="false" description="Delete resource &apos;FinalProject/Core/Src/BH1750 STM32.cpp&apos;" element1="/FinalProject/Core/Src/BH1750 STM32.cpp" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1745022778958"/>&#x0A;<refactoring comment="Delete resource &apos;FinalProject/Core/Inc/BH1750 STM32.hpp&apos;" deleteContents="false" description="Delete resource &apos;FinalProject/Core/Inc/BH1750 STM32.hpp&apos;" element1="/FinalProject/Core/Inc/BH1750 STM32.hpp" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1745022783144"/>
+</session>

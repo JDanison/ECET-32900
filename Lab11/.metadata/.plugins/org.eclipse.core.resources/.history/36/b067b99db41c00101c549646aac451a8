@@ -1,0 +1,27 @@
+#include "BH1750 STM32.h"
+
+BH1750::BH1750(I2C_HandleTypeDef* hi2c) {
+    _hi2c = hi2c;
+}
+
+HAL_StatusTypeDef BH1750::begin() {
+    HAL_StatusTypeDef status;
+    uint8_t cmd = BH1750_POWER_ON;
+    status = HAL_I2C_Master_Transmit(_hi2c, BH1750_ADDRESS, &cmd, 1, HAL_MAX_DELAY);
+    HAL_Delay(10);
+    cmd = BH1750_RESET;
+    status |= HAL_I2C_Master_Transmit(_hi2c, BH1750_ADDRESS, &cmd, 1, HAL_MAX_DELAY);
+    HAL_Delay(10);
+    cmd = BH1750_CONT_H_RES_MODE;
+    status |= HAL_I2C_Master_Transmit(_hi2c, BH1750_ADDRESS, &cmd, 1, HAL_MAX_DELAY);
+    return status;
+}
+
+float BH1750::readLightLevel() {
+    uint8_t buffer[2];
+    if (HAL_I2C_Master_Receive(_hi2c, BH1750_ADDRESS, buffer, 2, HAL_MAX_DELAY) != HAL_OK) {
+        return -1.0f;
+    }
+    uint16_t raw = (buffer[0] << 8) | buffer[1];
+    return raw / 1.2f; // lux
+}

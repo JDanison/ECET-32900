@@ -1,0 +1,6 @@
+../Core/Src/BH1750_STM32.c:5:6:BH1750_Init	1
+../Core/Src/BH1750_STM32.c:14:9:BH1750_Begin	3
+../Core/Src/BH1750_STM32.c:19:9:BH1750_Configure	2
+../Core/Src/BH1750_STM32.c:32:9:BH1750_SetMTreg	6
+../Core/Src/BH1750_STM32.c:48:9:BH1750_MeasurementReady	5
+../Core/Src/BH1750_STM32.c:67:7:BH1750_ReadLightLevel	6

@@ -1,0 +1,41 @@
+#ifndef BH1750_STM32_H
+#define BH1750_STM32_H
+
+#include "stm32l4xx_hal.h"
+
+#define BH1750_POWER_DOWN 0x00
+#define BH1750_POWER_ON 0x01
+#define BH1750_RESET 0x07
+#define BH1750_DEFAULT_MTREG 69
+#define BH1750_MTREG_MIN 31
+#define BH1750_MTREG_MAX 254
+
+class BH1750 {
+public:
+  enum Mode {
+    UNCONFIGURED = 0,
+    CONTINUOUS_HIGH_RES_MODE = 0x10,
+    CONTINUOUS_HIGH_RES_MODE_2 = 0x11,
+    CONTINUOUS_LOW_RES_MODE = 0x13,
+    ONE_TIME_HIGH_RES_MODE = 0x20,
+    ONE_TIME_HIGH_RES_MODE_2 = 0x21,
+    ONE_TIME_LOW_RES_MODE = 0x23
+  };
+
+  BH1750(uint8_t addr = 0x23, I2C_HandleTypeDef *hi2c = nullptr);
+  bool begin(Mode mode = CONTINUOUS_HIGH_RES_MODE);
+  bool configure(Mode mode);
+  bool setMTreg(uint8_t MTreg);
+  bool measurementReady(bool maxWait = false);
+  float readLightLevel();
+
+private:
+  uint8_t BH1750_ADDR;
+  uint8_t BH1750_MTreg = BH1750_DEFAULT_MTREG;
+  const float BH1750_CONV_FACTOR = 1.2;
+  Mode BH1750_MODE = UNCONFIGURED;
+  I2C_HandleTypeDef *hi2c;
+  uint32_t lastReadTimestamp;
+};
+
+#endif

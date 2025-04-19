@@ -1,0 +1,82 @@
+#include <BH1750_STM32.h>
+#include <stdio.h> // For debug prints (if UART is configured)
+
+BH1750::BH1750(uint8_t addr, I2C_HandleTypeDef *hi2c) : BH1750_ADDR(addr), hi2c(hi2c) {}
+
+bool BH1750::begin(Mode mode) {
+  if (hi2c == nullptr) {
+    return false;
+  }
+  return (configure(mode) && setMTreg(BH1750_DEFAULT_MTREG));
+}
+
+bool BH1750::configure(Mode mode) {
+  uint8_t cmd = (uint8_t)mode;
+  HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(hi2c, BH1750_ADDR << 1, &cmd, 1, HAL_MAX_DELAY);
+  
+  if (status != HAL_OK) {
+    // Debug print (ensure UART is configured)
+    // printf("BH1750 config failed: %d\r\n", status);
+    return false;
+  }
+  
+  HAL_Delay(10);
+  BH1750_MODE = mode;
+  lastReadTimestamp = HAL_GetTick();
+  return true;
+}
+
+bool BH1750::setMTreg(uint8_t MTreg) {
+  if (MTreg < BH1750_MTREG_MIN || MTreg > BH1750_MTREG_MAX) return false;
+
+  uint8_t cmd1 = (0b01000 << 3) | (MTreg >> 5);
+  uint8_t cmd2 = (0b011 << 5) | (MTreg & 0b11111);
+
+  if (HAL_I2C_Master_Transmit(hi2c, BH1750_ADDR << 1, &cmd1, 1, HAL_MAX_DELAY) != HAL_OK) return false;
+  if (HAL_I2C_Master_Transmit(hi2c, BH1750_ADDR << 1, &cmd2, 1, HAL_MAX_DELAY) != HAL_OK) return false;
+  if (HAL_I2C_Master_Transmit(hi2c, BH1750_ADDR << 1, (uint8_t*)&BH1750_MODE, 1, HAL_MAX_DELAY) != HAL_OK) return false;
+
+  HAL_Delay(10);
+  BH1750_MTreg = MTreg;
+  return true;
+}
+
+bool BH1750::measurementReady(bool maxWait) {
+  uint32_t delayTime = 0;
+  switch (BH1750_MODE) {
+    case CONTINUOUS_HIGH_RES_MODE:
+    case CONTINUOUS_HIGH_RES_MODE_2:
+    case ONE_TIME_HIGH_RES_MODE:
+    case ONE_TIME_HIGH_RES_MODE_2:
+      delayTime = maxWait ? 180 * BH1750_MTreg / BH1750_DEFAULT_MTREG : 120 * BH1750_MTreg / BH1750_DEFAULT_MTREG;
+      break;
+    case CONTINUOUS_LOW_RES_MODE:
+    case ONE_TIME_LOW_RES_MODE:
+      delayTime = maxWait ? 24 * BH1750_MTreg / BH1750_DEFAULT_MTREG : 16 * BH1750_MTreg / BH1750_DEFAULT_MTREG;
+      break;
+    default: return false;
+  }
+  return (HAL_GetTick() - lastReadTimestamp) >= delayTime;
+}
+
+float BH1750::readLightLevel() {
+  if (BH1750_MODE == UNCONFIGURED) return -2.0;
+
+  uint8_t data[2];
+  if (HAL_I2C_Master_Receive(hi2c, BH1750_ADDR << 1, data, 2, HAL_MAX_DELAY) != HAL_OK) return -1.0;
+
+  uint16_t raw = (data[0] << 8) | data[1];
+  float level = raw;
+
+  if (BH1750_MTreg != BH1750_DEFAULT_MTREG) {
+    level *= (BH1750_DEFAULT_MTREG / (float)BH1750_MTreg);
+  }
+
+  if (BH1750_MODE == ONE_TIME_HIGH_RES_MODE_2 || BH1750_MODE == CONTINUOUS_HIGH_RES_MODE_2) {
+    level /= 2;
+  }
+
+  level /= BH1750_CONV_FACTOR;
+  lastReadTimestamp = HAL_GetTick();
+  return level;
+}

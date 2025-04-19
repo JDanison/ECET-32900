@@ -1,0 +1,21 @@
+#ifndef __BH1750_STM32_H
+#define __BH1750_STM32_H
+
+#include "stm32l4xx_hal.h"
+
+#define BH1750_ADDRESS 0x23 << 1 // Shifted for STM32 HAL
+#define BH1750_POWER_ON 0x01
+#define BH1750_RESET 0x07
+#define BH1750_CONT_H_RES_MODE 0x10
+
+class BH1750 {
+public:
+    BH1750(I2C_HandleTypeDef* hi2c);
+    HAL_StatusTypeDef begin();
+    float readLightLevel();
+
+private:
+    I2C_HandleTypeDef* _hi2c;
+};
+
+#endif
