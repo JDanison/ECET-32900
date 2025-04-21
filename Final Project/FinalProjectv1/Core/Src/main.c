@@ -41,7 +41,17 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+/* Ambient Light Sensor */
 BH1750 mySensor;
+
+/* LED Array Output */
+#define myled1 GPIO_PIN_0
+#define myled2 GPIO_PIN_1
+#define myled3 GPIO_PIN_2
+#define myled4 GPIO_PIN_3
+#define myled5 GPIO_PIN_4
+#define myled6 GPIO_PIN_5
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -136,7 +146,24 @@ int main(void)
 
 	  	      lcd_goto(0,0);
 	  	      lcd_puts(lcd_buf);
-	  	    }
+
+	  	      /* Display Reading on LED Array */
+	  	      int num_leds = 1 + (int)(lux / 5000.0f); // 1 LED per 5000 lux
+
+	  	      if (num_leds > 6) {
+	  	    	  num_leds = 6; // Cap at 6 LEDs
+	  	      }
+
+	  	      // Turn off all LEDs first
+			  HAL_GPIO_WritePin(GPIOB,
+				  myled1 | myled2 | myled3 | myled4 | myled5 | myled6,
+				  GPIO_PIN_RESET);
+
+	  	      // Light up LEDs up to num_leds
+	  	      for (int i = 0; i < num_leds; i++) {
+	  	    	  HAL_GPIO_WritePin(GPIOB, myled1 << i, GPIO_PIN_SET);
+	  	      }
+	  }
 
 	  // Calculate elapsed time
 	  uint32_t elapsedTime = HAL_GetTick() - startTick;
@@ -147,7 +174,7 @@ int main(void)
 	  lcd_goto(0, 1); // Column 0, Row 1 (second line)
 	  lcd_puts(time_buf);
 
-	  HAL_Delay(1000);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -307,6 +334,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9
                           |GPIO_PIN_10|GPIO_PIN_11, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
+
   /*Configure GPIO pins : PA6 PA7 PA8 PA9
                            PA10 PA11 */
   GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9
@@ -315,6 +346,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB0 PB1 PB2 PB3
+                           PB4 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
