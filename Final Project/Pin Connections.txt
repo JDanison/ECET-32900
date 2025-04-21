@@ -21,3 +21,7 @@ PA8 - D4
 PA9 - D5
 PA10 - D6
 PA11 - D7
+
+ADC Reading
+PC0 - <1V LED
+PC2 - ADC1 Input
